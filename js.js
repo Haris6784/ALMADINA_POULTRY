@@ -7,20 +7,19 @@ function isContactExists(phone) {
     return contactData.some(contact => contact.phone === phone);
 }
 
-// Function to save a contact
-function saveContact(name, phone, category, subcategory) {
-    contactData.push({ name, phone, category, subcategory });
+function saveContact(name, phone, category, subcategory, isNew = true) {
+    contactData.push({ name, phone, category, subcategory, isNew });
     localStorage.setItem('contactData', JSON.stringify(contactData));
-    console.log("Contact saved: ", { name, phone, category, subcategory });
+    console.log("Contact saved: ", { name, phone, category, subcategory, isNew });
 }
+
 
 // Predefined contacts to be added under "Executive Contacts"
 // Predefined contacts to be added under "Executive Contacts"
 const newExecutiveContacts = [
     { name: "Shabhir Qadri", phone: "+92312-9832611", category: "Executive Contacts", subcategory: "None" },
     { name: "Muneer Nake ", phone: "+92301-6089348", category: "Executive Contacts", subcategory: "None" },
-    { name: "Muhammad Ilyas ", phone: "+92311-6833148", category: "Executive Contacts", subcategory: "None" },
-    { name: "Muhammad Haseeb", phone: "+92344-7895822", category: "Executive Contacts", subcategory: "None" },
+    { name: "Muhammad Ilyas ", phone: "+92311-6833148", category: "Executive Contacts", subcategory: "None" }
   ];
   
   // Predefined contacts to be added under "Shop Keepers Contacts"
@@ -211,8 +210,7 @@ const newExecutiveContacts = [
     { name: "Muhammad Bilal", phone: "+92316-7460238", category: "Employee Contacts", subcategory: "None" },
     { name: "Muhammad Irfan", phone: "+92310-7878370", category: "Employee Contacts", subcategory: "None" },
     { name: "Muhammad Haris", phone: "+92309-0295583", category: "Employee Contacts", subcategory: "None" },
-    { name: "Ahtesham 1", phone: "+92320-0956752", category: "Employee Contacts", subcategory: "None" },
-      { name: "Ahtesham 2", phone: "+92319-6271945", category: "Employee Contacts", subcategory: "None" }
+    { name: "Ahtesham", phone: "+92320-0956752", category: "Employee Contacts", subcategory: "None" }
   ];
   
   // Predefined contacts to be added under "Drivers Contacts"
@@ -293,7 +291,6 @@ document.getElementById("category").addEventListener("change", function () {
     subcategoryElement.disabled = this.value !== "Shop Keepers Contacts";
 });
 
-// Function to view contacts by category or subcategory
 function viewContacts(categoryOrSubcategory) {
     currentCategory = categoryOrSubcategory;
     document.getElementById("search-section").style.display = "block";
@@ -320,8 +317,10 @@ function viewContacts(categoryOrSubcategory) {
             <div>
                 <a href="tel:${phoneDisplay}" class="btn call-btn me-2">Call</a>
                 <a href="https://wa.me/${cleanedPhone}" class="btn whatsapp-btn me-2" target="_blank">WhatsApp</a>
-                <button class="btn btn-warning me-2" onclick="editContact(${index})">Edit</button>
-                <button class="btn delete-btn" onclick="deleteContact(${index})">Delete</button>
+                ${contact.isNew ? `
+                    <button class="btn btn-warning me-2" onclick="editContact(${index})">Edit</button>
+                    <button class="btn delete-btn" onclick="deleteContact(${index})">Delete</button>
+                ` : ''}
             </div>
         `;
         contactList.appendChild(contactItem);
@@ -333,6 +332,7 @@ function viewContacts(categoryOrSubcategory) {
     downloadButton.onclick = () => downloadContacts(categoryOrSubcategory, filteredContacts);
     contactList.appendChild(downloadButton);
 }
+
 
 // Function to search contacts within a category
 function searchCategoryContacts() {
