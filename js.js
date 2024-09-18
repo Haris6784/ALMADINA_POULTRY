@@ -7,12 +7,12 @@ function isContactExists(phone) {
     return contactData.some(contact => contact.phone === phone);
 }
 
-function saveContact(name, phone, category, subcategory, isNew = true) {
-    contactData.push({ name, phone, category, subcategory, isNew });
+// Function to save a contact
+function saveContact(name, phone, category, subcategory) {
+    contactData.push({ name, phone, category, subcategory });
     localStorage.setItem('contactData', JSON.stringify(contactData));
-    console.log("Contact saved: ", { name, phone, category, subcategory, isNew });
+    console.log("Contact saved: ", { name, phone, category, subcategory });
 }
-
 
 // Predefined contacts to be added under "Executive Contacts"
 // Predefined contacts to be added under "Executive Contacts"
@@ -291,6 +291,7 @@ document.getElementById("category").addEventListener("change", function () {
     subcategoryElement.disabled = this.value !== "Shop Keepers Contacts";
 });
 
+// Function to view contacts by category or subcategory
 function viewContacts(categoryOrSubcategory) {
     currentCategory = categoryOrSubcategory;
     document.getElementById("search-section").style.display = "block";
@@ -317,10 +318,8 @@ function viewContacts(categoryOrSubcategory) {
             <div>
                 <a href="tel:${phoneDisplay}" class="btn call-btn me-2">Call</a>
                 <a href="https://wa.me/${cleanedPhone}" class="btn whatsapp-btn me-2" target="_blank">WhatsApp</a>
-                ${contact.isNew ? `
-                    <button class="btn btn-warning me-2" onclick="editContact(${index})">Edit</button>
-                    <button class="btn delete-btn" onclick="deleteContact(${index})">Delete</button>
-                ` : ''}
+                <button class="btn btn-warning me-2" onclick="editContact(${index})">Edit</button>
+                <button class="btn delete-btn" onclick="deleteContact(${index})">Delete</button>
             </div>
         `;
         contactList.appendChild(contactItem);
@@ -332,7 +331,6 @@ function viewContacts(categoryOrSubcategory) {
     downloadButton.onclick = () => downloadContacts(categoryOrSubcategory, filteredContacts);
     contactList.appendChild(downloadButton);
 }
-
 
 // Function to search contacts within a category
 function searchCategoryContacts() {
